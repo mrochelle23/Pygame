@@ -5,9 +5,22 @@ import random
 lanes = [18, 38, 58, 78, 98, 118, 138, 158, 178, 198, 218, 238, 258, 278, 298, 318, 338, 358, 378, 398, 418, 438, 458, 478, 498, 518, 538, 558, 578, 598, 618, 638, 658, 678, 698, 718, 738, 758, 778, 798, 818, 838, 858, 878, 898, 918, 938]
 lanes_2 = lanes = [38, 58, 78, 98, 118, 138, 158, 178, 198, 218, 238, 258, 278, 298, 318, 338, 358, 378, 398, 418, 438, 458, 478, 498, 518, 538, 558, 578, 598, 618, 638, 658, 678, 698, 718, 738, 758, 778, 798, 818, 838, 858, 878, 898, 918, 938]
 pygame.init()
+pygame.mixer.init()
+
+# Load Sounds
+lives_lost = pygame.mixer.Sound('lives_lost.mp3')
+gain_points = pygame.mixer.Sound('gain_points.wav')
+game_win = pygame.mixer.Sound('game_win.mp3')
+game_lost = pygame.mixer.Sound('game_lost.mp3')
+
+# Setting The Width and Height
 WIDTH, HEIGHT = 950, 950
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Setting The Frame Rate
 clock = pygame.time.Clock()
+
+# Setting The Font
 main_font = pygame.font.SysFont("comicsans", 50)
 
  # Loading The Background Image
@@ -34,7 +47,7 @@ class GameObject(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.rect = self.surf.get_rect()
-    
+
     def render(self, screen):
         self.rect.x = self.x
         self.rect.y = self.y
@@ -246,6 +259,7 @@ def game_function():
         enemy_collide = pygame.sprite.spritecollideany(player, enemies)
         if enemy_collide:
             lives -= 1
+            pygame.mixer.Sound.play(lives_lost)
             enemy_collide.reset()
             if lives <= 0:
                 main_label = main_font.render("You Lost", 1, (255, 255, 255))
@@ -254,12 +268,14 @@ def game_function():
         ice_cream_collide = pygame.sprite.spritecollideany(player, creams)
         if ice_cream_collide:
             points += 1
+            pygame.mixer.Sound.play(gain_points)
             ice_cream_collide.reset()
 
         bomb_collide = pygame.sprite.spritecollideany(player, bombs)
         if bomb_collide:
             main_label = main_font.render("You Lost", 1, (255, 255, 255))
             screen.blit(main_label, (WIDTH/2 - main_label.get_width()/2, 350))
+            pygame.mixer.Sound.play(game_lost)
             running = False
             bomb_collide.reset()
 
@@ -270,6 +286,7 @@ def game_function():
 
         if lives <= 0:
             lost = True
+            running = False
 
         if points == 20:
             level += 1
@@ -281,8 +298,10 @@ def game_function():
             level += 1
         elif points == 100:
             level += 1
+
         # If Level Equals 6, A Label Will Be Created, Copied, and Displayed To The Screen Showing The User They Won
         if level == 6:
+            pygame.mixer.Sound.play(game_win)
             main_label = main_font.render("You Win", 1, (255, 255, 255))
             screen.blit(main_label, (WIDTH/2 - main_label.get_width()/2, 350))
 
