@@ -77,4 +77,3 @@ python main.py
 
 - Pygame library for game development.
 - Community resources and tutorials for support during development.
-```
