@@ -69,10 +69,6 @@ python main.py
 - Avoid colliding with enemies and bombs to preserve lives.
 - Reach Level 6 to win the game!
 
-## Screenshots
-
-![Gameplay Screenshot](screenshot.png) <!-- Replace with an actual screenshot file if available -->
-
 ## Acknowledgments
 
 - Pygame library for game development.
